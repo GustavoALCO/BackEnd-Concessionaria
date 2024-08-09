@@ -4517,7 +4517,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alves\\.nuget\\packages\\": {},
+    "C:\\Users\\Gustavo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
@@ -4526,14 +4526,14 @@
       "projectUniqueName": "E:\\Concessionaria\\Concessionaria\\Concessionaria.csproj",
       "projectName": "Concessionaria",
       "projectPath": "E:\\Concessionaria\\Concessionaria\\Concessionaria.csproj",
-      "packagesPath": "C:\\Users\\alves\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\Gustavo\\.nuget\\packages\\",
       "outputPath": "E:\\Concessionaria\\Concessionaria\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\alves\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Gustavo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

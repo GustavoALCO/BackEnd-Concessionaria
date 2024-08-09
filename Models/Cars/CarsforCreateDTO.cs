@@ -1,6 +1,6 @@
 ﻿using Concessionaria.Entities;
 
-namespace Concessionaria.Models;
+namespace Concessionaria.Models.Cars;
 
 public class CarsforCreateDTO
 {

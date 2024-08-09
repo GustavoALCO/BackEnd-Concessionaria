@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Concessionaria.Context;
 using Concessionaria.Entities;
-using Concessionaria.Models;
+using Concessionaria.Models.Cars;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,9 +38,9 @@ public static class CarsHandlers
     public static async Task<Results<NotFound, Ok<IEnumerable<CarsDTO>>>>
                                                 GetCarsId(OrganizadorContext DB,
                                                            IMapper mapper,
-                                                           string Id)
+                                                           Guid? Id)
     {
-        var carros = mapper.Map<IEnumerable<CarsDTO>>(await DB.Cars.FirstOrDefaultAsync(cars => cars.IdCar.ToString() == Id));
+        var carros = mapper.Map<IEnumerable<CarsDTO>>(await DB.Cars.FirstOrDefaultAsync(cars => cars.IdCar == Id));
 
         if (carros.Count() == 0 || carros == null)
         {
@@ -75,7 +75,7 @@ public static class CarsHandlers
                                            "GetCarroId",
                                            new 
                                            {
-                                            IdCar = ReturnCarro.Model
+                                            IdCar = ReturnCarro.IdCar
                                            });
     }
 
@@ -94,19 +94,22 @@ public static class CarsHandlers
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<NotFound, Ok<CarsDTO>>>
-                                                PutCar(OrganizadorContext DB,
-                                                        IMapper mapper,
-                                                        [FromQuery]
-                                                        CarsDTO carDTo,
-                                                        Guid Id)
+    public static async Task<Results<NotFound, Ok>>
+                                            PutCar(OrganizadorContext DB,
+                                                    IMapper mapper,
+                                                    [FromBody] CarsForAlterationDTO carAlteration,
+                                                    Guid Id)
     {
-        var carros = mapper.Map<CarsDTO>(await DB.Cars.FirstOrDefaultAsync(c => c.IdCar == Id));
+        var carros = await DB.Cars.FirstOrDefaultAsync(c => c.IdCar == Id);
+
         if (carros == null)
             return TypedResults.NotFound();
 
-        DB.Update(carros);
-        DB.SaveChanges();
-        return TypedResults.Ok<CarsDTO>(carros);
+        mapper.Map(carAlteration, carros);
+
+        await DB.SaveChangesAsync();
+
+        return TypedResults.Ok();
     }
+
 }

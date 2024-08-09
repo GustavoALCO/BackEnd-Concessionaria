@@ -15,5 +15,27 @@ public static class EndPointRouteBuilderExtensions
         CarrosEndPointComId.MapGet("", CarsHandlers.GetCarsId);
 
         CarrosEndPoint.MapPost("", CarsHandlers.PostCars);
+
+        CarrosEndPointComId.MapPut("", CarsHandlers.PutCar);
+
+        CarrosEndPointComId.MapDelete("", CarsHandlers.DeleteCar);
+    }
+
+    public static void RegisterUsuariosEndPoints(this IEndpointRouteBuilder endpointRouteBuilder)
+    {
+        var UserEndPoint = endpointRouteBuilder.MapGroup("/Users");
+
+        var UserWithId = UserEndPoint.MapGroup("/{Id:guid}");
+
+        UserEndPoint.MapGet("", UserHandlers.GetUsers);
+
+        UserWithId.MapGet("", UserHandlers.GetUsersById).WithName("GetUserId");
+
+        UserEndPoint.MapPost("", UserHandlers.PostUser);
+
+        UserWithId.MapDelete("", UserHandlers.DeleteUser);
+
+        UserWithId.MapPut("", UserHandlers.PutUser);
+
     }
 }

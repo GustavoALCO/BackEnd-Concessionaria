@@ -27,6 +27,7 @@ var app = builder.Build();
 
 app.RegisterCarrosEndpoints();
 //Esta classe esta no ENDPOINTROUTEBUILDEREXTENSIONS e serve para que possa aparecer as requisiçoes da API
+app.RegisterUsuariosEndPoints();
 
 
 // Configure the HTTP request pipeline.

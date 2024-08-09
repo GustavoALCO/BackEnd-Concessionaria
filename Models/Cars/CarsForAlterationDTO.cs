@@ -1,13 +1,7 @@
-﻿using Concessionaria.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿namespace Concessionaria.Models.Cars;
 
-namespace Concessionaria.Models;
-
-public class CarsDTO
+public class CarsForAlterationDTO
 {
-    public Guid IdCar { get; set; }
-    //Id Gerado com GUID para ter pouca chance de se repetir
-
     public required string CarBrand { get; set; }
     //Variavel para atribuir o nome da fabricante do carro
 

@@ -20,8 +20,12 @@ public class CarsDTO
     public required int Age { get; set; }
     //Variavel para atribuir o ano do carro
 
-    public string CarPlate { get; set; }
+    public string? CarPlate { get; set; }
     //Variavel para atribuir a placa do carro
 
-    public ImageDTO Image { get; set; }
+    public List<string> Url { get; set; } = new List<string>();
+
+    public DateTimeOffset DateUpload { get; set; }
+
+    public DateTimeOffset? DateUpdate { get; set; }
 }

@@ -8,7 +8,7 @@ public static class EndPointRouteBuilderExtensions
     {                                                              //Pega a rota que esta a URl
         var CarrosEndPoint = endpointRouteBuilder.MapGroup("/Carros");
 
-        var CarrosEndPointComId = CarrosEndPoint.MapGroup("/{IdCar:guid}");
+        var CarrosEndPointComId = CarrosEndPoint.MapGroup("/{Id:Guid}");
 
         CarrosEndPoint.MapGet("", CarsHandlers.GetCarros).WithName("GetCarroId");
 
@@ -25,7 +25,7 @@ public static class EndPointRouteBuilderExtensions
     {
         var UserEndPoint = endpointRouteBuilder.MapGroup("/Users");
 
-        var UserWithId = UserEndPoint.MapGroup("/{Id:guid}");
+        var UserWithId = UserEndPoint.MapGroup("/{Id:Guid}");
 
         UserEndPoint.MapGet("", UserHandlers.GetUsers);
 

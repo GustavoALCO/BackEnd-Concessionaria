@@ -1,28 +1,33 @@
 ﻿using Concessionaria.Entities;
+using Concessionaria.Service;
+
 
 namespace Concessionaria.Models.Cars;
 
-public class CarsforCreateDTO
+public class CarsforCreateDTO 
 {
     public Guid IdCar { get; set; }
-    //Id Gerado com GUID para ter pouca chance de se repetir
 
-    public required Guid idUser { get; set; }
+    public Guid IdUser { get; set; }
 
-    public required string CarBrand { get; set; }
-    //Variavel para atribuir o nome da fabricante do carro
+    public string CarBrand { get; set; }
 
-    public required string Model { get; set; }
-    //Variavel para atribuir o nome do carro
+    public string Model { get; set; }
 
-    public required string Color { get; set; }
-    //Variavel para atribuir a cor do carro
+    public string Color { get; set; }
 
-    public required int Age { get; set; }
-    //Variavel para atribuir o ano do carro
+    public int Age { get; set; }
 
     public string CarPlate { get; set; }
-    //Variavel para atribuir a placa do carro
 
-    public List<ImageDTO> Images { get; set; }
+    public List<string> Url { get; set; } = new List<string>();
+
+    public DateTimeOffset DateUpload { get; set; }
+
+    
+    public CarsforCreateDTO()
+    {
+        IdCar = Guid.NewGuid();
+        DateUpload = DateTimeOffset.Now;
+    }
 }

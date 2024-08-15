@@ -2,7 +2,7 @@
 
 namespace Concessionaria.Entities;
 
-public class Carros
+public class Cars
 {
     [Key]
     [Required]
@@ -13,13 +13,9 @@ public class Carros
     public User User { get; set; }
     // Propriedade de navegação para Usuario
     
-    [Required]
-    [MaxLength(20)]
     public string CarBrand { get; set; }
     //Variavel para atribuir o nome da fabricante do carro
     
-    [Required]
-    [MaxLength(40)]
     public string Model { get; set; }
     //Variavel para atribuir o nome do carro
 
@@ -34,21 +30,24 @@ public class Carros
     public string CarPlate { get; set; }
     //Variavel para atribuir a placa do carro
 
-    public List<ImageCar> Images { get; set; }
-    //Variavel para criar uma lista onde fica as imagens //instancia uma lista na hora que a entidade for criada
+    public  List<string> Url { get; set; } = new List<string>();
 
-    public Carros()
+    public  DateTimeOffset DateUpload { get; set; }
+
+    public DateTimeOffset? DateUpdate { get; set; }
+    public Cars()
     {
         
     }
-    public Carros(string carBrand, string model, string color, int age, string carPlate)
+    public Cars(string carBrand, string model, string color, int age, string carPlate)
     {
         IdCar = Guid.NewGuid();
+        Url = new List<string>();
         CarBrand = carBrand;
         Model = model;
         Color = color;
         Age = age;
         CarPlate = carPlate;
-        Images = new List<ImageCar>();
+        DateUpload = DateTimeOffset.Now;
     }
 }

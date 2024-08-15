@@ -2,10 +2,12 @@
 using Concessionaria.Context;
 using Concessionaria.Entities;
 using Concessionaria.Models.Cars;
+using Concessionaria.Service;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using System.ComponentModel;
 
 namespace Concessionaria.EndpointHandlers;
 
@@ -35,14 +37,14 @@ public static class CarsHandlers
     
     }
 
-    public static async Task<Results<NotFound, Ok<IEnumerable<CarsDTO>>>>
+    public static async Task<Results<NotFound, Ok<CarsDTO>>>
                                                 GetCarsId(OrganizadorContext DB,
                                                            IMapper mapper,
                                                            Guid? Id)
     {
-        var carros = mapper.Map<IEnumerable<CarsDTO>>(await DB.Cars.FirstOrDefaultAsync(cars => cars.IdCar == Id));
+        var carros = mapper.Map<CarsDTO>(await DB.Cars.FirstOrDefaultAsync(cars => cars.IdCar == Id));
 
-        if (carros.Count() == 0 || carros == null)
+        if (carros == null)
         {
             return TypedResults.NotFound();
         }
@@ -52,38 +54,40 @@ public static class CarsHandlers
         }
     }
 
-    public static async Task<Results<BadRequest,CreatedAtRoute<CarsDTO>>>
-                                               PostCars(OrganizadorContext DB,
-                                               IMapper mapper,
-                                               [FromBody] 
-                                               CarsforCreateDTO CarsforCreate)
+    public static async Task<Results<BadRequest, CreatedAtRoute<CarsDTO>>>
+     PostCars(OrganizadorContext DB,
+              IMapper mapper,
+              [FromBody] CarsforCreateDTO CarsforCreate,
+              ImageUpload imageUpload)
     {
         if (CarsforCreate == null)
             return TypedResults.BadRequest();
-        
 
-        var carro = mapper.Map<Carros>(CarsforCreate);
-        //Pega os dados do Body para a variavel
+        var imageUrls = await imageUpload.UploadBase64ImagesAsync(CarsforCreate.IdCar, CarsforCreate.Url, "carros");
+
+        var carro = mapper.Map<Cars>(CarsforCreate);
+        carro.Url = imageUrls;
+
         DB.Add(carro);
-        //Coloca no banco de dados
         await DB.SaveChangesAsync();
-        //Salvo no banco de dados
 
         var ReturnCarro = mapper.Map<CarsDTO>(carro);
 
         return TypedResults.CreatedAtRoute(ReturnCarro,
                                            "GetCarroId",
-                                           new 
+                                           new
                                            {
-                                            IdCar = ReturnCarro.IdCar
+                                               IdCar = ReturnCarro.IdCar
                                            });
     }
 
+
+
     public static async Task<Results<NotFound,Ok>> DeleteCar(
                                                     OrganizadorContext DB,
-                                                    Guid id) 
+                                                    Guid Id) 
     {
-        var carros = await DB.Cars.FirstOrDefaultAsync(c => c.IdCar == id);
+        var carros = await DB.Cars.FirstOrDefaultAsync(c => c.IdCar == Id);
         
         if (carros == null)
             return TypedResults.NotFound();

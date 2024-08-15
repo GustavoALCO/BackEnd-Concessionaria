@@ -2,9 +2,14 @@ using AutoMapper;
 using Concessionaria.Context;
 using Concessionaria.Extensions;
 using Concessionaria.Models;
+using Concessionaria.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,11 +19,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<ImageUpload>();
 builder.Services.AddDbContext<OrganizadorContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("BdConnection"));
 });//CONEXÃO COM O BANCO DE DADOS
+
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //necessario para o AutoMapper Funcionar

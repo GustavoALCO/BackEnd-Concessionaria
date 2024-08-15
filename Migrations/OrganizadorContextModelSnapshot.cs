@@ -22,7 +22,7 @@ namespace Concessionaria.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Concessionaria.Entities.Carros", b =>
+            modelBuilder.Entity("Concessionaria.Entities.Cars", b =>
                 {
                     b.Property<Guid>("IdCar")
                         .ValueGeneratedOnAdd()
@@ -33,8 +33,7 @@ namespace Concessionaria.Migrations
 
                     b.Property<string>("CarBrand")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CarPlate")
                         .IsRequired()
@@ -45,13 +44,22 @@ namespace Concessionaria.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTimeOffset?>("DateUpdate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("DateUpload")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<Guid>("IdUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdCar");
 
@@ -60,37 +68,23 @@ namespace Concessionaria.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("Concessionaria.Entities.ImageCar", b =>
-                {
-                    b.Property<Guid>("IdImage")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset?>("DateUpdate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTimeOffset>("DateUpload")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("IdCar")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdImage");
-
-                    b.HasIndex("IdCar");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("Concessionaria.Entities.User", b =>
                 {
                     b.Property<Guid>("IdUser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cep")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -109,12 +103,16 @@ namespace Concessionaria.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("IdUser");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Concessionaria.Entities.Carros", b =>
+            modelBuilder.Entity("Concessionaria.Entities.Cars", b =>
                 {
                     b.HasOne("Concessionaria.Entities.User", "User")
                         .WithMany("Carros")
@@ -123,22 +121,6 @@ namespace Concessionaria.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Concessionaria.Entities.ImageCar", b =>
-                {
-                    b.HasOne("Concessionaria.Entities.Carros", "Carros")
-                        .WithMany("Images")
-                        .HasForeignKey("IdCar")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Carros");
-                });
-
-            modelBuilder.Entity("Concessionaria.Entities.Carros", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Concessionaria.Entities.User", b =>

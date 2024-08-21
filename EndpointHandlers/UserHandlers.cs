@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Concessionaria.Service;
+using Microsoft.OpenApi.Any;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Concessionaria.EndpointHandlers;
 
@@ -29,6 +31,7 @@ public static class UserHandlers
         return TypedResults.Ok(users);
     }
 
+    [Authorize]
     public static async Task<Results<NotFound, Ok<UserDTO>>>
                       GetUsersById(OrganizadorContext DB,
                                    IMapper mapper,
@@ -45,20 +48,21 @@ public static class UserHandlers
         return TypedResults.Ok(userDto);
     }
 
-
     public static async Task<Results<BadRequest<string>, CreatedAtRoute<UserDTO>>>
                             PostUser(OrganizadorContext DB,
+                                     HashService hashService,
                                      IMapper mapper,
                                      [FromBody] 
                                      UserForCreateDTO UserCreate)
     {
         if (UserCreate == null || await DB.Users.AnyAsync(x => x.Email == UserCreate.Email))
             return TypedResults.BadRequest("Email já em uso.");
-
+        
         var User = mapper.Map<User>(UserCreate);
+        hashService.RegisterUser(User, UserCreate.Password);
 
         DB.Users.Add(User);
-        DB.SaveChanges();
+        await DB.SaveChangesAsync();
 
         var UserReturn = mapper.Map<UserDTO>(User);
 
@@ -103,17 +107,27 @@ public static class UserHandlers
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<BadRequest,Ok>>
-                                    LoginRequest(OrganizadorContext DB,
-                                              IMapper mapper,
-                                              [FromBody]
-                                              LoginDTO loginRequest)
+    public static async Task<Results<BadRequest, Ok<object>>> LoginRequest(
+    OrganizadorContext DB,
+    IMapper mapper,
+    HashService HashService,
+    GenerateToken generateToken,
+    [FromBody] LoginDTO loginRequest)
     {
+        // Busca o usuário pelo email
         var login = await DB.Users.FirstOrDefaultAsync(x => loginRequest.Email == x.Email);
 
-        if(login == null || loginRequest.Password == login.Password) 
-            TypedResults.NotFound();
+        // Se o usuário não for encontrado ou a senha estiver incorreta, retorna BadRequest
+        if (login == null || !HashService.ValidateUser(login, loginRequest.Password))
+        {
+            return TypedResults.BadRequest();
+        }
 
-        return TypedResults.Ok();
-    }//ESPERANDO IMPLEMENTAÇÃO DOS TOKENS JWT
+        // Gera o token JWT
+        var token = generateToken.GenerateTokenLogin(loginRequest.Email);
+
+        // Retorna o token em uma resposta OK
+        return TypedResults.Ok((object)new { token });
+    }
+
 }

@@ -3,11 +3,13 @@ using Concessionaria.Context;
 using Concessionaria.Entities;
 using Concessionaria.Models.Cars;
 using Concessionaria.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Concessionaria.EndpointHandlers;
 
@@ -54,6 +56,72 @@ public static class CarsHandlers
         }
     }
 
+    public static async Task<Results<Ok<List<CarsDTO>>, NotFound>>
+    GetCarsFilter(OrganizadorContext DB,
+                  IMapper mapper,
+                  [FromQuery] string ?carBrand,
+                  [FromQuery] string ?model,
+                  [FromQuery] int[] ?age,
+                  [FromQuery] string ?color)
+    {
+
+        // Cria uma consulta IQueryable que pode ser modificada dinamicamente
+        var query = DB.Cars.AsQueryable();
+
+        // Filtra por marca do carro, ignorando maiúsculas e minúsculas
+        if (!string.IsNullOrEmpty(carBrand))
+        {
+            query = query.Where(c => c.CarBrand.ToLower()
+                                                .Contains(carBrand.ToLower()));
+        }
+
+        // Filtra por modelo do carro, ignorando maiúsculas e minúsculas
+        if (!string.IsNullOrEmpty(model))
+        {
+            query = query.Where(c => c.Model.ToLower()
+                                            .Contains(model.ToLower()));
+        }
+
+        // Filtra por intervalo de anos se a lista tiver exatamente dois valores
+        if (age != null && age.Length == 2)
+        {
+            int startYear = age[0]; // Ano inicial do intervalo
+            int endYear = age[1];   // Ano final do intervalo
+
+            if (startYear > endYear)
+            {
+                (startYear, endYear) = (endYear, startYear);
+            }//garante que o valor do start será menor 
+
+            query = query.Where(c => c.Age >= startYear && c.Age <= endYear);
+        }
+        // Filtra por anos específicos se a lista tiver um ou mais valores
+        else if (age != null && age.Any())
+        {
+            query = query.Where(c => age.Contains(c.Age));
+        }
+
+        // Filtra por cor do carro, ignorando maiúsculas e minúsculas
+        if (!string.IsNullOrEmpty(color))
+        {
+            query = query.Where(c => c.Color.ToLower()
+                                            .Contains(color.ToLower()));
+        }
+
+        // Executa a consulta e mapeia o resultado para o tipo CarsDTO
+        var cars = mapper.Map<List<CarsDTO>>(await query.ToListAsync());
+
+        // Retorna NotFound se a lista estiver vazia, caso contrário retorna Ok com a lista de carros
+        if (cars.Count == 0)
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok(cars);
+    }
+
+
+    [Authorize]
     public static async Task<Results<BadRequest, CreatedAtRoute<CarsDTO>>>
      PostCars(OrganizadorContext DB,
               IMapper mapper,
@@ -82,7 +150,7 @@ public static class CarsHandlers
     }
 
 
-
+    [Authorize]
     public static async Task<Results<NotFound,Ok>> DeleteCar(
                                                     OrganizadorContext DB,
                                                     Guid Id) 
@@ -97,7 +165,7 @@ public static class CarsHandlers
         DB.SaveChanges();
         return TypedResults.Ok();
     }
-
+    [Authorize]
     public static async Task<Results<NotFound, Ok>>
                                             PutCar(OrganizadorContext DB,
                                                     IMapper mapper,

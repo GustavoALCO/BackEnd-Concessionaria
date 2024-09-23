@@ -3,7 +3,6 @@ using System;
 using Concessionaria.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -16,116 +15,172 @@ namespace Concessionaria.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Concessionaria.Entities.Cars", b =>
+            modelBuilder.Entity("Concessionaria.Entities.Moto", b =>
                 {
-                    b.Property<Guid>("IdCar")
+                    b.Property<Guid>("IdMoto")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CarBrand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CarPlate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset?>("DateUpdate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("DateUpload")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Fuel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MotoBrand")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StoreIdStore")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("IdCar");
+                    b.HasKey("IdMoto");
 
-                    b.HasIndex("IdUser");
+                    b.HasIndex("StoreIdStore");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Motos");
+                });
+
+            modelBuilder.Entity("Concessionaria.Entities.Store", b =>
+                {
+                    b.Property<int>("IdStore")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CEP")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsFull")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("IdStore");
+
+                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("Concessionaria.Entities.User", b =>
                 {
                     b.Property<Guid>("IdUser")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cep")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdUser");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Concessionaria.Entities.Cars", b =>
+            modelBuilder.Entity("Concessionaria.Entities.Moto", b =>
                 {
-                    b.HasOne("Concessionaria.Entities.User", "User")
-                        .WithMany("Carros")
-                        .HasForeignKey("IdUser")
+                    b.HasOne("Concessionaria.Entities.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreIdStore")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.OwnsOne("Concessionaria.Entities.Auditable", "Auditable", b1 =>
+                        {
+                            b1.Property<Guid>("MotoIdMoto")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("AlterationUserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid?>("CreateUserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTimeOffset?>("DateUpdate")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTimeOffset>("DateUpload")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("MotoIdMoto");
+
+                            b1.ToTable("Motos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MotoIdMoto");
+                        });
+
+                    b.Navigation("Auditable")
+                        .IsRequired();
+
+                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Concessionaria.Entities.User", b =>
                 {
-                    b.Navigation("Carros");
+                    b.OwnsOne("Concessionaria.Entities.Auditable", "Auditable", b1 =>
+                        {
+                            b1.Property<Guid>("UserIdUser")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("AlterationUserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid?>("CreateUserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTimeOffset?>("DateUpdate")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTimeOffset>("DateUpload")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("UserIdUser");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserIdUser");
+                        });
+
+                    b.Navigation("Auditable")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

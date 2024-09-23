@@ -8,11 +8,23 @@ public class UserProfile : Profile
 {
     public UserProfile() 
     {
-        CreateMap<User, UserDTO>().ReverseMap();
+        CreateMap<User, UserDTO>()
+           .ForMember(dest => dest.DateUpload, opt => opt.MapFrom(src => src.Auditable.DateUpload))
+           .ForMember(dest => dest.CreateUserId, opt => opt.MapFrom(src => src.Auditable.CreateUserId))
+           .ForMember(dest => dest.DateUpdate, opt => opt.MapFrom(src => src.Auditable.DateUpdate))
+           .ForMember(dest => dest.AlterationUserId, opt => opt.MapFrom(src => src.Auditable.AlterationUserId))
+           .ReverseMap()
+           .ForMember(dest => dest.Auditable, opt => opt.MapFrom(src => new Auditable
+           {
+               DateUpload = src.DateUpload,
+               CreateUserId = src.CreateUserId,
+               DateUpdate = src.DateUpdate,
+               AlterationUserId = (Guid)src.AlterationUserId
+           }));
 
-        CreateMap<User, UserForCreateDTO>().ReverseMap();
+        CreateMap<User, UserCreateDTO>().ReverseMap();
 
-        CreateMap<User, UserForAlterationDTO>().ReverseMap();
+        CreateMap<User, UserAlterationDTO>().ReverseMap();
 
     }
 }

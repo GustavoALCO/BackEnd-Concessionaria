@@ -10,17 +10,17 @@ public static class EndPointRouteBuilderExtensions
 
         var CarrosEndPointComId = CarrosEndPoint.MapGroup("/{Id:Guid}");
 
-        CarrosEndPoint.MapGet("", CarsHandlers.GetCarros).WithName("GetCarroId").WithSummary("Busca apenas pelo o nome ou retorna todos");
+        CarrosEndPoint.MapGet("", MotoHandlers.GetCarros).WithName("GetCarroId").WithSummary("Busca apenas pelo o nome ou retorna todos");
 
-        CarrosEndPointComId.MapGet("", CarsHandlers.GetCarsId).WithSummary("Busca o carro pelo Id selecionado");
+        CarrosEndPointComId.MapGet("", MotoHandlers.GetCarsId).WithSummary("Busca o carro pelo Id selecionado");
 
-        CarrosEndPoint.MapGet("Filtro", CarsHandlers.GetCarsFilter).WithSummary("Faz uma busca com todos os Filtros passado, Não precisa do token JWT");
+        CarrosEndPoint.MapGet("Filtro", MotoHandlers.GetCarsFilter).WithSummary("Faz uma busca com todos os Filtros passado, Não precisa do token JWT");
 
-        CarrosEndPoint.MapPost("", CarsHandlers.PostCars).WithSummary("Publica Um carro, Sendo necessario um token");
+        CarrosEndPoint.MapPost("", MotoHandlers.PostCars).WithSummary("Publica Um carro, Sendo necessario um token");
 
-        CarrosEndPointComId.MapPut("", CarsHandlers.PutCar).WithSummary("Altera Propriedades do carro, É necessario um token");
+        CarrosEndPointComId.MapPut("", MotoHandlers.PutCar).WithSummary("Altera Propriedades do carro, É necessario um token");
 
-        CarrosEndPointComId.MapDelete("", CarsHandlers.DeleteCar).WithSummary("Deleta os carros sendo necessario um token JWT");
+        CarrosEndPointComId.MapDelete("", MotoHandlers.DeleteCar).WithSummary("Deleta os carros sendo necessario um token JWT");
     }
 
     public static void RegisterUsuariosEndPoints(this IEndpointRouteBuilder endpointRouteBuilder)

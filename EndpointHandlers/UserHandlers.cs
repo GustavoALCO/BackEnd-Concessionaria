@@ -53,15 +53,21 @@ public static class UserHandlers
                                      HashService hashService,
                                      IMapper mapper,
                                      [FromBody] 
-                                     UserForCreateDTO UserCreate)
+                                     UserCreateDTO UserCreate)
     {
-        if (UserCreate == null || await DB.Users.AnyAsync(x => x.Email == UserCreate.Email))
-            return TypedResults.BadRequest("Email já em uso.");
+        if (UserCreate == null || await DB.Users.AnyAsync(x => x.Login == UserCreate.Login))
+            return TypedResults.BadRequest("login já em uso.");
         
+
         var User = mapper.Map<User>(UserCreate);
+
+        User.Auditable.CreateUserId = UserCreate.CreateUserId;  
+        User.Auditable.DateUpload = DateTimeOffset.Now;
         hashService.RegisterUser(User, UserCreate.Password);
 
+
         DB.Users.Add(User);
+        Console.WriteLine(User.Auditable.DateUpload);
         await DB.SaveChangesAsync();
 
         var UserReturn = mapper.Map<UserDTO>(User);
@@ -81,9 +87,9 @@ public static class UserHandlers
         if (Id == null)
             return TypedResults.NotFound();
 
-        var user = await DB.Users.FirstOrDefaultAsync(x => Id == x.IdUser);  
+        var User = await DB.Users.FirstOrDefaultAsync(x => Id == x.IdUser);  
 
-        DB.Users.Remove(user);
+        DB.Users.Remove(User);
         DB.SaveChanges();
 
         return TypedResults.Ok();
@@ -92,16 +98,21 @@ public static class UserHandlers
     public static async Task<Results<NotFound<string>, Ok>>
                                     PutUser(OrganizadorContext DB,
                                             IMapper mapper,
+                                            HashService hashService,
                                             [FromBody]
-                                            UserForAlterationDTO UserForAlteration,
+                                            UserAlterationDTO UserAlteration,
                                             Guid Id)
     {
-       var user = await DB.Users.FirstOrDefaultAsync(x => x.IdUser == Id);
+       var User = await DB.Users.FirstOrDefaultAsync(x => x.IdUser == Id);
 
-        if(user == null)
+        if(User == null)
             return TypedResults.NotFound("Não foi possivel alterar");
 
-        mapper.Map(UserForAlteration, user);
+        User.Auditable.AlterationUserId = UserAlteration.AlterationUserId;
+        User.Auditable.DateUpdate = DateTimeOffset.Now;
+        hashService.RegisterUser(User, UserAlteration.Password);
+
+        mapper.Map(UserAlteration, User);
         DB.SaveChanges();
 
         return TypedResults.Ok();
@@ -112,10 +123,10 @@ public static class UserHandlers
     IMapper mapper,
     HashService HashService,
     GenerateToken generateToken,
-    [FromBody] LoginDTO loginRequest)
+    [FromBody] UserLoginDTO loginRequest)
     {
         // Busca o usuário pelo email
-        var login = await DB.Users.FirstOrDefaultAsync(x => loginRequest.Email == x.Email);
+        var login = await DB.Users.FirstOrDefaultAsync(x => loginRequest.Login == x.Login);
 
         // Se o usuário não for encontrado ou a senha estiver incorreta, retorna BadRequest
         if (login == null || !HashService.ValidateUser(login, loginRequest.Password))
@@ -124,7 +135,7 @@ public static class UserHandlers
         }
 
         // Gera o token JWT
-        var token = generateToken.GenerateTokenLogin(loginRequest.Email);
+        var token = generateToken.GenerateTokenLogin(loginRequest.Login);
 
         // Retorna o token em uma resposta OK
         return TypedResults.Ok((object)new { token });

@@ -43,10 +43,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<HashService>();
 builder.Services.AddScoped<ImageUpload>();
-builder.Services.AddDbContext<OrganizadorContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BdConnection"));
-});//CONEXÃO COM O BANCO DE DADOS
+builder.Services.AddDbContext<OrganizadorContext>(
+    o => o.UseSqlite(builder.Configuration.GetConnectionString("BdConnection"))
+);//CONEXÃO COM O BANCO DE DADOS
 
 builder.Services.AddAuthentication(options =>
 {

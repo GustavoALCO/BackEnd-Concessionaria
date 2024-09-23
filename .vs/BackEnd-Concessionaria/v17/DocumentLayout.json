@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\profiles\\motoprofiles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:profiles\\motoprofiles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\profiles\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:profiles\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\endpointhandlers\\motohandlers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:endpointhandlers\\motohandlers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\models\\users\\useralterationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:models\\users\\useralterationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\models\\users\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:models\\users\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|c:\\users\\alves\\downloads\\backend-concessionaria\\endpointhandlers\\userhandlers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{946BFAF6-4902-4284-9B08-96E24374C34D}|Concessionaria.csproj|solutionrelative:endpointhandlers\\userhandlers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MotoProfiles.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Profiles\\MotoProfiles.cs",
+              "RelativeDocumentMoniker": "Profiles\\MotoProfiles.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Profiles\\MotoProfiles.cs",
+              "RelativeToolTip": "Profiles\\MotoProfiles.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-23T16:01:23.96Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MotoHandlers.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\EndpointHandlers\\MotoHandlers.cs",
+              "RelativeDocumentMoniker": "EndpointHandlers\\MotoHandlers.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\EndpointHandlers\\MotoHandlers.cs",
+              "RelativeToolTip": "EndpointHandlers\\MotoHandlers.cs",
+              "ViewState": "AQIAAJsAAAAAAAAAAAAAAC8AAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T20:03:12.136Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "Entities\\User.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Entities\\User.cs",
+              "RelativeToolTip": "Entities\\User.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T13:55:34.943Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserDTO.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Models\\Users\\UserDTO.cs",
+              "RelativeDocumentMoniker": "Models\\Users\\UserDTO.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Models\\Users\\UserDTO.cs",
+              "RelativeToolTip": "Models\\Users\\UserDTO.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T13:44:33.813Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Profiles\\UserProfile.cs",
+              "RelativeDocumentMoniker": "Profiles\\UserProfile.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Profiles\\UserProfile.cs",
+              "RelativeToolTip": "Profiles\\UserProfile.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAAAAsAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T13:32:22.235Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserAlterationDTO.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Models\\Users\\UserAlterationDTO.cs",
+              "RelativeDocumentMoniker": "Models\\Users\\UserAlterationDTO.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Models\\Users\\UserAlterationDTO.cs",
+              "RelativeToolTip": "Models\\Users\\UserAlterationDTO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAwAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T13:29:28.856Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UserHandlers.cs",
+              "DocumentMoniker": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\EndpointHandlers\\UserHandlers.cs",
+              "RelativeDocumentMoniker": "EndpointHandlers\\UserHandlers.cs",
+              "ToolTip": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\EndpointHandlers\\UserHandlers.cs",
+              "RelativeToolTip": "EndpointHandlers\\UserHandlers.cs",
+              "ViewState": "AQIAAFgAAAAAAAAAAAAAAGYAAAA9AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T13:28:16.554Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

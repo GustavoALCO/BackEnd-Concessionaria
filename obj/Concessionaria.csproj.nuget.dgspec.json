@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Concessionaria\\Concessionaria\\Concessionaria.csproj": {}
+    "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj": {}
   },
   "projects": {
-    "E:\\Concessionaria\\Concessionaria\\Concessionaria.csproj": {
+    "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Concessionaria\\Concessionaria\\Concessionaria.csproj",
+        "projectUniqueName": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj",
         "projectName": "Concessionaria",
-        "projectPath": "E:\\Concessionaria\\Concessionaria\\Concessionaria.csproj",
+        "projectPath": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj",
         "packagesPath": "C:\\Users\\alves\\.nuget\\packages\\",
-        "outputPath": "E:\\Concessionaria\\Concessionaria\\obj\\",
+        "outputPath": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -68,21 +68,25 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[8.0.8, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[8.0.8, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite.Core": {
+              "target": "Package",
+              "version": "[8.0.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.7.1, )"
+              "version": "[6.7.3, )"
             }
           },
           "imports": [

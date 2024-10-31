@@ -5,6 +5,7 @@ namespace Concessionaria.Models.Users;
 
 public class UserAlterationDTO
 {
+    public int IdStore { get; set; }
 
     public string Name { get; set; }
 

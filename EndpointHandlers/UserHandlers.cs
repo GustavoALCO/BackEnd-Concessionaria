@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using Concessionaria.Context;
 using Concessionaria.Entities;
-using Concessionaria.Models;
 using Concessionaria.Models.Users;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Concessionaria.Service;
-using Microsoft.OpenApi.Any;
 using Microsoft.AspNetCore.Authorization;
+using FluentValidation;
 
 namespace Concessionaria.EndpointHandlers;
 
@@ -35,12 +34,13 @@ public static class UserHandlers
     public static async Task<Results<NotFound, Ok<UserDTO>>>
                       GetUsersById(OrganizadorContext DB,
                                    IMapper mapper,
-                                   Guid? Id)
+                                   Guid? Id
+                                   )
     {
         if (Id == null)
             return TypedResults.NotFound();
 
-        var user = await DB.Users.FirstOrDefaultAsync(x => x.IdUser == Id);
+        var user = await DB.Users.FindAsync(Id);
         if (user == null)
             return TypedResults.NotFound();
 
@@ -50,6 +50,7 @@ public static class UserHandlers
 
     public static async Task<Results<BadRequest<string>, CreatedAtRoute<UserDTO>>>
                             PostUser(OrganizadorContext DB,
+                                    IValidator<UserCreateDTO> validator,
                                      HashService hashService,
                                      IMapper mapper,
                                      [FromBody] 
@@ -58,6 +59,9 @@ public static class UserHandlers
         if (UserCreate == null || await DB.Users.AnyAsync(x => x.Login == UserCreate.Login))
             return TypedResults.BadRequest("login já em uso.");
         
+        var user = validator.Validate(UserCreate);
+        if (!user.IsValid)
+            return TypedResults.BadRequest(user.Errors.ToString());
 
         var User = mapper.Map<User>(UserCreate);
 
@@ -79,7 +83,7 @@ public static class UserHandlers
                                                IdCar = UserReturn.IdUser
                                            });
     }
-
+    [Authorize]
     public static async Task<Results<NotFound,Ok>>
                         DeleteUser(OrganizadorContext DB,
                                    Guid? Id)
@@ -95,9 +99,10 @@ public static class UserHandlers
         return TypedResults.Ok();
     }
 
-    public static async Task<Results<NotFound<string>, Ok>>
+    public static async Task<Results<BadRequest<string>, Ok>>
                                     PutUser(OrganizadorContext DB,
                                             IMapper mapper,
+                                            IValidator<UserAlterationDTO> validator,
                                             HashService hashService,
                                             [FromBody]
                                             UserAlterationDTO UserAlteration,
@@ -106,11 +111,18 @@ public static class UserHandlers
        var User = await DB.Users.FirstOrDefaultAsync(x => x.IdUser == Id);
 
         if(User == null)
-            return TypedResults.NotFound("Não foi possivel alterar");
+            return TypedResults.BadRequest("Não foi possivel Achar o User");
+
+        var user = validator.Validate(UserAlteration);
+        if(!user.IsValid)
+                return TypedResults.BadRequest(user.Errors.ToString());
 
         User.Auditable.AlterationUserId = UserAlteration.AlterationUserId;
         User.Auditable.DateUpdate = DateTimeOffset.Now;
-        hashService.RegisterUser(User, UserAlteration.Password);
+
+        if(UserAlteration.Password != null)
+            hashService.RegisterUser(User, UserAlteration.Password);
+
 
         mapper.Map(UserAlteration, User);
         DB.SaveChanges();
@@ -134,8 +146,8 @@ public static class UserHandlers
             return TypedResults.BadRequest();
         }
 
-        // Gera o token JWT
-        var token = generateToken.GenerateTokenLogin(loginRequest.Login);
+        
+        var token = generateToken.GerarTokenLogin(loginRequest.Login);
 
         // Retorna o token em uma resposta OK
         return TypedResults.Ok((object)new { token });

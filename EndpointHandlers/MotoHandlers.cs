@@ -2,7 +2,10 @@
 using Concessionaria.Context;
 using Concessionaria.Entities;
 using Concessionaria.Models.Cars;
+using Concessionaria.Models.Moto;
+using Concessionaria.Models.Store;
 using Concessionaria.Service;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -10,21 +13,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Concessionaria.EndpointHandlers;
 
-public static class CarsHandlers
+public static class MotoHandlers
 {
 
     public static async Task<Results<NotFound,
-                                           Ok<IEnumerable<MotoDTO>>
-                                           >> GetCarros
+                                           Ok<IEnumerable<MotoWithNumberDTO>>
+                                           >> GetMotos
                             (OrganizadorContext DB,
                             IMapper mapper,
                             [FromQuery(Name = "model")]
                             string? Modelo
                              ) 
     {
-        var motos = mapper.Map<IEnumerable<MotoDTO>>(await DB.Motos.Where(cars => Modelo == null|| cars.Model.ToUpper()
-                                                               .Contains(Modelo.ToUpper()))
-                                                               .ToListAsync());
+        var motos = mapper.Map<IEnumerable<MotoWithNumberDTO>>(await DB.Motos.Where(m => m.Model.ToUpper().Contains(Modelo.ToUpper())).ToListAsync());
         if (motos == null || motos.Count() == 0)
         {
             return TypedResults.NotFound();
@@ -35,11 +36,11 @@ public static class CarsHandlers
     }
 
     public static async Task<Results<NotFound, Ok<MotoDTO>>>
-                                                GetCarsId(OrganizadorContext DB,
+                                                GetmotoId(OrganizadorContext DB,
                                                            IMapper mapper,
                                                            Guid? Id)
     {
-        var motos = mapper.Map<MotoDTO>(await DB.Motos.FirstOrDefaultAsync(cars => cars.IdMoto == Id));
+        var motos = mapper.Map<MotoDTO>(await DB.Motos.Include(s => s.IdStore).Where(m => m.IdMoto == Id).ToListAsync());
 
         if (motos == null)
         {
@@ -51,9 +52,9 @@ public static class CarsHandlers
     }
 
     public static async Task<Results<Ok<List<MotoDTO>>, NotFound>>
-    GetCarsFilter(OrganizadorContext DB,
+    GetmotoFilter(OrganizadorContext DB,
                   IMapper mapper,
-                  [FromQuery] string ?carBrand,
+                  [FromQuery] string ?motoBrand,
                   [FromQuery] string ?model,
                   [FromQuery] int[] ?age,
                   [FromQuery] string ?color)
@@ -63,13 +64,13 @@ public static class CarsHandlers
         var query = DB.Motos.AsQueryable();
 
         // Filtra por marca do carro, ignorando maiúsculas e minúsculas
-        if (!string.IsNullOrEmpty(carBrand))
+        if (!string.IsNullOrEmpty(motoBrand))
         {
             query = query.Where(c => c.MotoBrand.ToLower()
-                                                .Contains(carBrand.ToLower()));
+                                                .Contains(motoBrand.ToLower()));
         }
 
-        // Filtra por modelo do carro, ignorando maiúsculas e minúsculas
+        // Filtra por modelo da moto, ignorando maiúsculas e minúsculas
         if (!string.IsNullOrEmpty(model))
         {
             query = query.Where(c => c.Model.ToLower()
@@ -102,32 +103,34 @@ public static class CarsHandlers
                                             .Contains(color.ToLower()));
         }
 
-        // Executa a consulta e mapeia o resultado para o tipo CarsDTO
-        var cars = mapper.Map<List<MotoDTO>>(await query.ToListAsync());
+        // Executa a consulta e mapeia o resultado para o tipo motoDTO
+        var moto = mapper.Map<List<MotoDTO>>(await query.ToListAsync());
 
         // Retorna NotFound se a lista estiver vazia, caso contrário retorna Ok com a lista de motos
-        if (cars.Count == 0)
+        if (moto.Count == 0)
         {
             return TypedResults.NotFound();
         }
 
-        return TypedResults.Ok(cars);
+        return TypedResults.Ok(moto);
     }
 
 
     [Authorize]
-    public static async Task<Results<BadRequest, CreatedAtRoute<MotoDTO>>>
-     PostCars(OrganizadorContext DB,
+    public static async Task<Results<BadRequest<string>, CreatedAtRoute<MotoDTO>>>
+     Postmoto(OrganizadorContext DB,
               IMapper mapper,
-              [FromBody] MotoCreateDTO CarsforCreate,
+              IValidator<MotoCreateDTO> validator,
+              [FromBody] MotoCreateDTO motoCreate,
               ImageUpload imageUpload)
     {
-        if (CarsforCreate == null)
-            return TypedResults.BadRequest();
+        var validate = validator.Validate(motoCreate);
+        if(!validate.IsValid)
+            return TypedResults.BadRequest(validate.Errors.ToString());
 
-        var imageUrls = await imageUpload.UploadBase64ImagesAsync(CarsforCreate.IdMoto, CarsforCreate.Url, "motos");
+        var imageUrls = await imageUpload.UploadBase64ImagesAsync(motoCreate.IdMoto, motoCreate.Url, "motos");
 
-        var moto = mapper.Map<Moto>(CarsforCreate);
+        var moto = mapper.Map<Moto>(motoCreate);
         moto.Url = imageUrls;
 
         DB.Add(moto);
@@ -145,7 +148,7 @@ public static class CarsHandlers
 
 
     [Authorize]
-    public static async Task<Results<NotFound,Ok>> DeleteCar(
+    public static async Task<Results<NotFound,Ok>> DeleteMoto(
                                                     OrganizadorContext DB,
                                                     Guid Id) 
     {
@@ -159,17 +162,23 @@ public static class CarsHandlers
         DB.SaveChanges();
         return TypedResults.Ok();
     }
+
     [Authorize]
-    public static async Task<Results<NotFound, Ok>>
-                                            PutCar(OrganizadorContext DB,
+    public static async Task<Results<BadRequest<string>, Ok>>
+                                            PutMoto(OrganizadorContext DB,
+                                                    IValidator<MotoAlterationDTO> validator,
                                                     IMapper mapper,
                                                     [FromBody] MotoAlterationDTO carAlteration,
                                                     Guid Id)
     {
+        var validate = validator.Validate(carAlteration);
+        if(!validate.IsValid)
+            return TypedResults.BadRequest(validate.IsValid.ToString());
+
         var motos = await DB.Motos.FirstOrDefaultAsync(c => c.IdMoto == Id);
 
         if (motos == null)
-            return TypedResults.NotFound();
+            return TypedResults.BadRequest("Não existe Motos com esse Id");
 
         mapper.Map(carAlteration, motos);
 

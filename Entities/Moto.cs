@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Concessionaria.Entities;
 
@@ -14,24 +15,30 @@ public class Moto
     public string Model { get; set; }
     //Variavel para atribuir o nome do carro
 
-    public string Description { get; set; }
-    //Variavel para atribuir uma Descrição da moto anunciada
-
     public string Fuel { get; set; }
     //Variavel para atribuir qual será o combustivel 
 
     public string Color { get; set; }
     //Variavel para atribuir a cor do carro
 
+    public string Plate { get; set; }
+    //Variavel para atribuir a placa do carro
+
     public int Age { get; set; }
     //Variavel para atribuir o ano do carro
 
-    public List<string> Url { get; set; }
+    public int Km { get; set; }
+
+    public int Price { get; set; }
+
+    public string[] Url { get; set; }
     //Lista para Atribuir links das Imagens que fizeram upload na azure
+
+    [ForeignKey("Store")]
+    public int IdStore { get; set; }
 
     public Auditable Auditable { get; set; }
 
-    public Store Store { get; set; }
 
     public Moto()
     {

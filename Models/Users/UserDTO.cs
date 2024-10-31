@@ -8,6 +8,8 @@ public class UserDTO
     //Classe de User
     public Guid IdUser { get; set; }
 
+    public int IdStore { get; set; }
+
     public string Name { get; set; }
 
     public string LastName { get; set; }

@@ -10,41 +10,39 @@ namespace Concessionaria.Service
     {
         private readonly IConfiguration _configuration;
 
-        // Construtor que recebe a configuração da aplicação
         public GenerateToken(IConfiguration configuration)
         {
             _configuration = configuration;
+            //configuração para acessar informaçoes do appsetings
         }
 
         // Método que gera o token JWT
-        public string GenerateTokenLogin(string username)
+        public string GerarTokenLogin(string username)
         {
-            // Cria a chave de segurança usando a chave secreta definida na configuração
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            
+            var chaveScreta = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            //busca a chave secreta que esta no appsetings 
 
-            // Define as credenciais de assinatura usando a chave de segurança
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(chaveScreta, SecurityAlgorithms.HmacSha256);
+            //informa a chave o tipo de segurança para a criação do Header do JWT
 
-            // Define os claims do token
             var claims = new[]
             {
-                // Claim para o assunto (usuário)
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                
-                // Claim para o identificador único do token
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim("login", username)
+                //adiciona no claim o nome do gerador do token
             };
 
-            // Cria o token JWT
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"], // Emissor do token
-                audience: _configuration["Jwt:Audience"], // Audiência do token
-                claims: claims, // Claims do token
-                expires: DateTime.Now.AddHours(double.Parse(_configuration["Jwt:ExpireHours"])), // Data de expiração do token
-                signingCredentials: credentials // Credenciais de assinatura
-            );
-
-            // Retorna o token JWT como uma string
+                    issuer: _configuration["Jwt:Issuer"],
+                    audience: _configuration["Jwt:Audience"],
+                    //Audience e o Issuer são assinaturas para que o Jwt funcione corretamente
+                    claims: claims,
+                    //claims serve para passar dados adicionais do gerador do código
+                    expires: DateTime.Now.AddHours(Convert.ToDouble(_configuration["Jwt:ExpireHours"])),
+                    //Define quantas horas o token vai existir
+                    signingCredentials: credentials
+                    );
+  
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

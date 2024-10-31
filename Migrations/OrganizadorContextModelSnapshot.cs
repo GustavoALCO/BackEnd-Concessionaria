@@ -30,13 +30,15 @@ namespace Concessionaria.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Fuel")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("IdStore")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Km")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -46,7 +48,11 @@ namespace Concessionaria.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StoreIdStore")
+                    b.Property<string>("Plate")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Price")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Url")
@@ -55,7 +61,7 @@ namespace Concessionaria.Migrations
 
                     b.HasKey("IdMoto");
 
-                    b.HasIndex("StoreIdStore");
+                    b.HasIndex("IdStore");
 
                     b.ToTable("Motos");
                 });
@@ -70,16 +76,20 @@ namespace Concessionaria.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("AdressNumber")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CEP")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsFull")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("PhoneNumbers")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("IdStore");
 
-                    b.ToTable("Stores");
+                    b.ToTable("Store");
                 });
 
             modelBuilder.Entity("Concessionaria.Entities.User", b =>
@@ -87,6 +97,9 @@ namespace Concessionaria.Migrations
                     b.Property<Guid>("IdUser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("IdStore")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -110,14 +123,16 @@ namespace Concessionaria.Migrations
 
                     b.HasKey("IdUser");
 
+                    b.HasIndex("IdStore");
+
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Concessionaria.Entities.Moto", b =>
                 {
-                    b.HasOne("Concessionaria.Entities.Store", "Store")
+                    b.HasOne("Concessionaria.Entities.Store", null)
                         .WithMany()
-                        .HasForeignKey("StoreIdStore")
+                        .HasForeignKey("IdStore")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -129,7 +144,7 @@ namespace Concessionaria.Migrations
                             b1.Property<Guid>("AlterationUserId")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<Guid?>("CreateUserId")
+                            b1.Property<Guid>("CreateUserId")
                                 .HasColumnType("TEXT");
 
                             b1.Property<DateTimeOffset?>("DateUpdate")
@@ -148,12 +163,16 @@ namespace Concessionaria.Migrations
 
                     b.Navigation("Auditable")
                         .IsRequired();
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("Concessionaria.Entities.User", b =>
                 {
+                    b.HasOne("Concessionaria.Entities.Store", null)
+                        .WithMany()
+                        .HasForeignKey("IdStore")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("Concessionaria.Entities.Auditable", "Auditable", b1 =>
                         {
                             b1.Property<Guid>("UserIdUser")
@@ -162,7 +181,7 @@ namespace Concessionaria.Migrations
                             b1.Property<Guid>("AlterationUserId")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<Guid?>("CreateUserId")
+                            b1.Property<Guid>("CreateUserId")
                                 .HasColumnType("TEXT");
 
                             b1.Property<DateTimeOffset?>("DateUpdate")

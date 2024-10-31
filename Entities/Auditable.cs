@@ -9,7 +9,7 @@ public class Auditable
     public DateTimeOffset DateUpload { get; set; }
 
     // Variavel para o usuário que criou
-    public Guid? CreateUserId { get; set; }
+    public Guid CreateUserId { get; set; }
 
     public DateTimeOffset? DateUpdate { get; set; }
 

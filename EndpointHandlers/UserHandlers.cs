@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Concessionaria.Service;
-using Microsoft.AspNetCore.Authorization;
 using FluentValidation;
-
+using System.Web.Mvc;
 namespace Concessionaria.EndpointHandlers;
 
 public static class UserHandlers
 {
+    [Authorize]
     public static async Task<Results<NotFound, Ok<IEnumerable<UserDTO>>>>
                         GetUsers(OrganizadorContext DB,
                                  IMapper mapper,
@@ -20,7 +20,7 @@ public static class UserHandlers
                                  string? name
                                  ) 
     {
-        var users = mapper.Map<IEnumerable<UserDTO>>(await DB.Users.Where(x => name == null || name.ToUpper().Contains(x.Name.ToUpper())).ToListAsync());
+        var users = mapper.Map<IEnumerable<UserDTO>>(await DB.Users.Where(x => name == null || x.Name.ToUpper().Contains(name.ToUpper())).ToListAsync());
 
         if(users.Count() == 0 || users.Count() == 0)
         {
@@ -47,7 +47,7 @@ public static class UserHandlers
         var userDto = mapper.Map<UserDTO>(user);
         return TypedResults.Ok(userDto);
     }
-
+    [Authorize]
     public static async Task<Results<BadRequest<string>, CreatedAtRoute<UserDTO>>>
                             PostUser(OrganizadorContext DB,
                                     IValidator<UserCreateDTO> validator,
@@ -71,7 +71,7 @@ public static class UserHandlers
 
 
         DB.Users.Add(User);
-        Console.WriteLine(User.Auditable.DateUpload);
+
         await DB.SaveChangesAsync();
 
         var UserReturn = mapper.Map<UserDTO>(User);
@@ -98,7 +98,7 @@ public static class UserHandlers
 
         return TypedResults.Ok();
     }
-
+    [Authorize]
     public static async Task<Results<BadRequest<string>, Ok>>
                                     PutUser(OrganizadorContext DB,
                                             IMapper mapper,
@@ -129,7 +129,7 @@ public static class UserHandlers
 
         return TypedResults.Ok();
     }
-
+    
     public static async Task<Results<BadRequest, Ok<object>>> LoginRequest(
     OrganizadorContext DB,
     IMapper mapper,
@@ -147,10 +147,40 @@ public static class UserHandlers
         }
 
         
-        var token = generateToken.GerarTokenLogin(loginRequest.Login);
+        var token = generateToken.GerarTokenLogin(login.IdUser, login.Name, login.Role);
 
         // Retorna o token em uma resposta OK
         return TypedResults.Ok((object)new { token });
     }
 
+    [Authorize]
+    public static async Task<Ok> VerifyToken()
+    {
+        return TypedResults.Ok();
+        // se caso o token passar pelo authorize ele vai retornar um Ok mostrando que esta valido
+    }
+
+    public static async Task<Results<Ok, NotFound>> AlterPassword(OrganizadorContext DB,
+                                                        IMapper mapper,
+                                                        HashService hashService,
+                                                        Guid Id,
+                                                        [FromBody]
+                                                        AlterPasswordDTO UserAlteration
+                                                        )
+    {
+        var User = await DB.Users.FirstOrDefaultAsync(x => Id == x.IdUser);
+
+        if (User == null)
+            return TypedResults.NotFound();
+
+        User.Auditable.AlterationUserId = UserAlteration.AlterationUserId;
+        User.Auditable.DateUpdate = DateTimeOffset.Now;
+
+        if (UserAlteration.Password != null)
+            hashService.RegisterUser(User, UserAlteration.Password);
+
+        DB.SaveChanges();
+
+        return TypedResults.Ok();
+    }
 }

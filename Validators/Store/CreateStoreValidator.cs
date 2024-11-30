@@ -24,8 +24,8 @@ public class CreateStoreValidator : AbstractValidator<StoreCreateDTO>
             .Must(phoneNumbers => phoneNumbers.Length < 3).WithMessage("Só pode ter apenas 2 Numeros de Telefone Por Loja")
             .ForEach(phoneNumber => phoneNumber
                                     .Must(phone =>
-                                          System.Text.RegularExpressions.Regex.IsMatch(phone, @"^\(\d{2}\) \d{5}-\d{4}$"))
-                                          .WithMessage("O número de telefone deve estar no formato (XX) XXXXX-XXXX."));
+                                          System.Text.RegularExpressions.Regex.IsMatch(phone, @"^\(\d{2}\) (\d{5}-\d{4}|\d{4}-\d{4}$)"))
+                                          .WithMessage("O número de telefone deve estar no formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX"));
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Concessionaria.Service
         }
 
         // Método que gera o token JWT
-        public string GerarTokenLogin(string username)
+        public string GerarTokenLogin(Guid IdUser, string username, string Role)
         {
             
             var chaveScreta = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -28,7 +29,9 @@ namespace Concessionaria.Service
 
             var claims = new[]
             {
-                new Claim("login", username)
+                new Claim("id", IdUser.ToString()),
+                new Claim("login", username),
+                new Claim("role", Role)
                 //adiciona no claim o nome do gerador do token
             };
 

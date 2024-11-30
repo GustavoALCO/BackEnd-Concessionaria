@@ -6,19 +6,22 @@ using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Web.Mvc;
 
 
 namespace Concessionaria.EndpointHandlers;
 
 public class StoreHandlers
 {
+    [Authorize]
     public static async Task<Results<Ok<IEnumerable<StoreDTO>>, BadRequest>>GetStoreAsync
                                                     (OrganizadorContext DB,
                                                      IMapper mapper,
-                                                     int? Id)
+                                                     [FromQuery(Name = "Adress")]
+                                                     string? Adress)
     {
 
-        var lojas = mapper.Map<IEnumerable<StoreDTO>>( await DB.Store.Where(s => s == null|| s.IdStore == Id).ToListAsync());
+        var lojas = mapper.Map<IEnumerable<StoreDTO>>( await DB.Store.Where(s => Adress == null|| s.Adress.ToUpper().Contains(Adress.ToUpper())).ToListAsync());
 
         if (lojas.Count() == 0 || lojas == null)
             return TypedResults.BadRequest();
@@ -26,6 +29,20 @@ public class StoreHandlers
         return TypedResults.Ok(lojas);
     }
 
+    [Authorize]
+    public static async Task<Results<Ok<StoreDTO>, NotFound>>GetStoreId(OrganizadorContext DB,
+        IMapper mapper,
+        int id)
+    {
+        var lojas = mapper.Map<StoreDTO>(await DB.Store.FirstOrDefaultAsync(s => s.IdStore ==  id));
+
+        if(lojas == null)
+            return TypedResults.NotFound();
+
+        return TypedResults.Ok(lojas);
+    }
+
+    [Authorize]
     public static async Task<Results<Ok, BadRequest<string>>> PostStoreAsync(
                                                                     OrganizadorContext DB,
                                                                     IMapper mapper,
@@ -44,7 +61,7 @@ public class StoreHandlers
 
         return TypedResults.Ok();
     }
-
+    [Authorize]
     public static async Task<Results<Ok, BadRequest<string>>> PutStoreAsync
                                                       (OrganizadorContext DB,
                                                        IMapper mapper,
@@ -67,7 +84,7 @@ public class StoreHandlers
 
         return TypedResults.Ok();
     }
-
+    [Authorize]
     public static async Task<Results<Ok,BadRequest>> DeleteStore(OrganizadorContext DB,
                                                                  int Id) 
     {

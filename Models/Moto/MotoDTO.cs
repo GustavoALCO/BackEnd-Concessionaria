@@ -26,5 +26,6 @@ public class MotoDTO
 
     //Classe Store 
     public int IdStore { get; set; }
-    
+
+    public string[] phoneNumber { get; set; }
 } 

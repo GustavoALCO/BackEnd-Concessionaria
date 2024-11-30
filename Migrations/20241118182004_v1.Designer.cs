@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Concessionaria.Migrations
 {
     [DbContext(typeof(OrganizadorContext))]
-    [Migration("20241031185713_v1")]
+    [Migration("20241118182004_v1")]
     partial class v1
     {
         /// <inheritdoc />

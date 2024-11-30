@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj": {}
+    "D:\\BackEnd-Concessionaria\\Concessionaria.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj": {
+    "D:\\BackEnd-Concessionaria\\Concessionaria.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj",
+        "projectUniqueName": "D:\\BackEnd-Concessionaria\\Concessionaria.csproj",
         "projectName": "Concessionaria",
-        "projectPath": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\Concessionaria.csproj",
-        "packagesPath": "C:\\Users\\alves\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alves\\Downloads\\BackEnd-Concessionaria\\obj\\",
+        "projectPath": "D:\\BackEnd-Concessionaria\\Concessionaria.csproj",
+        "packagesPath": "C:\\Users\\Gustavo\\.nuget\\packages\\",
+        "outputPath": "D:\\BackEnd-Concessionaria\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\alves\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Gustavo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

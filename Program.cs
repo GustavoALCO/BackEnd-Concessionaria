@@ -47,7 +47,21 @@ builder.Services.AddSwaggerGen(c =>
         {securitySchema, new string[] {} }
     });
 }
-    );
+    );//Adicionando Configuraçoes de segurança no swagger
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200")
+                          //Link do Site Publicado ou do localhost 
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+
+                      });
+});//Adicionando Cors para o acesso para o front ter acesso ao back
 
 builder.Services.AddScoped<HashService>();
 builder.Services.AddScoped<ImageUpload>();
@@ -107,6 +121,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 
